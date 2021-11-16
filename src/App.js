@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from 'react'
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+import React from 'react'
+import Dashboard from './components/Dashboard'
+import Login from './components/Login'
+
+const code = new URLSearchParams(window.location.search).get("code")
 
 function App() {
-  // Initialize state
-  const [cities, setCities] = useState([])
-
-  const citez = ["Fairfax", "Vienna", "Falls Church", "Arlington"]
-  useEffect(() => {
-    setCities(citez)
-  })
 
   return (
-    <div className="App">
-      {/* Render the cities*/}
-      <div>
-        <h1>Cities</h1>
-        <ul className="cities">
-          {cities.map((city, index) =>
-            <li key={index}>
-              {city}
-            </li>
-          )}
-        </ul>
-      </div>
-    </div>
+    code ? <Dashboard code={code}/> : <Login/>
   )
 }
 

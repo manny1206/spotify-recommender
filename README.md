@@ -8,18 +8,41 @@
 
 * **Student Name: Emmanuel Jones** 
 * **Student G-Number: G01124882** 
-* **Heroku Deployment URL:**
+* **Heroku Deployment URL: https://emmanuel-jones-swe432-hw4.herokuapp.com/ **
 
 ### Documentation of your Web App and React Components
 
 *Here please describe your (at least) 5 different React components as well as the overall purpose of your web application. We provide an example below of what we expect this documentation to look like.*
 
-**General App Description:** This web application provides information about cities loaded from a centralized database at www.citiesinfo.org. This app can help people find reference information about various city attributes such as population, capitals, and other demographic information.
+**General App Description:** Loads a recent list of liked tracks from a users Spotify library, that they can play. Also let's users search for and play specific songs
 
-* **React Component 1:** Retrieve a city from our Washington DC Database
-  * *Functionality:* Displays a list of cities and allows the user to sort the cities alphabetically
-  * *Interactivity:* The user can click on an arrow at the top of the list to change the sorting.
+* **App:** Displays the Login component or Dashboard component, depending on whether user is logged in
+  * *Functionality:* Houses the login and dashboard 
+  * *Interactivity:* The user doesn't really interact, since it immediately renders Login or Dashboard
 
+* **Login:** Displays the login button on the start screen
+  * *Functionality:* Lets users login to their Spotify account before accessing the app.
+  * *Interactivity:* The user clicks the Login button
+
+* **Dashboard:** The main screen for displaying all of the Spotify content
+  * *Functionality:* Lets users search for tracks and displays their recently liked tracks
+  * *Interactivity:* The user searchs for tracks and clicks them. The users clicks on liked tracks from the UserLibrary component
+
+* **SearchResult:** Displays a particular search result from the list of searchResults retrieved in Dashboard
+  * *Functionality:* Shows simple information about search result
+  * *Interactivity:* The user can click on it to start playing the song
+
+* **UserLibrary:** The current user's library of liked tracks (only shows last 50)
+  * *Functionality:* Lets users immediately see songs already in their library, without having to search
+  * *Interactivity:* The user can click on a song's UserLibraryCard in the grid of songs to play it
+
+* **UserLibaryCard:** Display a card of a particular song to be used in the grid in UserLibrary
+  * *Functionality:* Shows simple information about a song in UserLibrary
+  * *Interactivity:* The user can click the card to play the song
+
+* **TrackPlayer:** A player where the user can play songs from spotify
+  * *Functionality:* Lets the user play the songs clicked on from search or their UserLibrary
+  * *Interactivity:* The user can play/pause or like/unlike a song they clicked on from searching or their library
 ## Project Overview
 
 This repo contains a barebones React app with a single component. You will use this as the "base" version of your Interactive Front-end application for HW Assignment #4. You will simply create a copy of this repo through GitHub classroom and then work in that repo. 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { TextField, Container } from "@mui/material"
 import SpotifyWebApi from "spotify-web-api-node"
 
-import useAuth from "./useAuth"
+import useAuth from "../useAuth"
 import SearchResult from "./SearchResult"
 import TrackPlayer from "./TrackPlayer"
 import UserLibrary from "./UserLibrary"

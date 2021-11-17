@@ -10,7 +10,7 @@ const SPOTIFY_AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${SPO
 export default function Login() {
   return (
     <Container className="d-flex justify-content-center align-items-center" maxWidth="sm" style={{minHeight:"100vh"}}>
-      <Button variant="contained" color="success" href={SPOTIFY_AUTH_URL}>
+      <Button variant="contained" color="success" borderRadius="50%" href={SPOTIFY_AUTH_URL}>
         Login With Spotify
       </Button>
     </Container>

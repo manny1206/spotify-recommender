@@ -41,8 +41,8 @@ app.post("/refresh", (req, res) => {
   spotifyAPI.refreshAccessToken()
     .then(data => {
       res.json({
-        accessToken: data.body.accessToken,
-        expiresIn: data.body.expiresIn
+        accessToken: data.body.access_token,
+        expiresIn: data.body.expires_in
       })
     })
     .catch(err => {
@@ -51,4 +51,4 @@ app.post("/refresh", (req, res) => {
     })
 })
 
-app.listen(3001)
+app.listen(process.env.PORT || 3001, () => console.log("server starting on port 3001!"))

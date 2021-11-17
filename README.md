@@ -6,8 +6,8 @@
 
 *Please fill in this information before submission*
 
-* **Student Name:** 
-* **Student G-Number:** 
+* **Student Name: Emmanuel Jones** 
+* **Student G-Number: G01124882** 
 * **Heroku Deployment URL:**
 
 ### Documentation of your Web App and React Components
@@ -24,9 +24,9 @@
 
 This repo contains a barebones React app with a single component. You will use this as the "base" version of your Interactive Front-end application for HW Assignment #4. You will simply create a copy of this repo through GitHub classroom and then work in that repo. 
 
-## Homework Assignment 3 Detailed Instructions
+## Homework Assignment 4 Detailed Instructions
 
-You can find the deatiled instructions for HW Assignment #4 on the [course webpage](https://cs.gmu.edu/~kpmoran/teaching/swe-432-f21/hw4). Please read these carefully before getting started.
+You can find the detailed instructions for HW Assignment #4 on the [course webpage](https://cs.gmu.edu/~kpmoran/teaching/swe-432-f21/hw4). Please read these carefully before getting started.
 
 ## Running this Project Locally
 

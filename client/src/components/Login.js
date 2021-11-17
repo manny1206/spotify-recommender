@@ -1,7 +1,6 @@
 import React from "react"
 import Button from "@mui/material/Button"
 import Container from "@mui/material/Container"
-import { minHeight } from "@mui/system"
 
 const SPOTIFY_CLIENT_ID = "fc40f86251ce4a378422d00d57473fa1" // change later
 const SPOTIFY_REDIRECT_URI = "http://localhost:3000"

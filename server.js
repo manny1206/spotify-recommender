@@ -1,11 +1,14 @@
 const express = require("express")
 const cors = require("cors")
+const path = require("path")
+
 const SpotifyWebAPI = require("spotify-web-api-node")
 
 const app = express()
+app.use(express.static(path.join(__dirname, "client/build")))
 app.use(cors())
 app.use(express.json())
-app.use(express.static(path.join(__dirname, "client/build")))
+
 
 app.post("/login", (req, res) => {
   const code = req.body.code

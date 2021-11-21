@@ -9,6 +9,7 @@ const spotifyAPI = new SpotifyWebApi({
 
 export default function UserLibrary({ accessToken, playTrack }) {
   const [userLibrary, setUserLibrary] = useState([])
+  const [loadLibrary, setLoadLibrary] = useState(true)
 
   useEffect(() => {
     if (!accessToken) return
@@ -17,12 +18,16 @@ export default function UserLibrary({ accessToken, playTrack }) {
 
   useEffect(() => {
     if (!accessToken) return
+    if (!loadLibrary) return
+    await downloadLibrary()
 
-    let loaded = true
+    setLoadLibrary(false)
+  }, [])
+
+  const downloadLibrary = async () => {
     spotifyAPI.getMySavedTracks({limit: 50})
       .then(res => {
         console.log(res)
-        if (loaded) return
         setUserLibrary(res.body.items.map(track => {
           const largeAlbumImage = track.track.album.images.reduce((largest, image) => {
             if (image.height > largest.height) return image
@@ -37,9 +42,7 @@ export default function UserLibrary({ accessToken, playTrack }) {
           }
         }))
       })
-
-    return () => (loaded = false)
-  }, [userLibrary])
+  }
 
   return (
     <div className="d-flex m-2 align-items-center" style={{cursor: "pointer"}}>

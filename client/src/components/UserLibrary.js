@@ -19,13 +19,13 @@ export default function UserLibrary({ accessToken, playTrack }) {
   useEffect(() => {
     if (!accessToken) return
     if (!loadLibrary) return
-    await downloadLibrary()
+    downloadLibrary()
 
     setLoadLibrary(false)
   }, [])
 
   const downloadLibrary = async () => {
-    spotifyAPI.getMySavedTracks({limit: 50})
+    await spotifyAPI.getMySavedTracks({limit: 50})
       .then(res => {
         console.log(res)
         setUserLibrary(res.body.items.map(track => {

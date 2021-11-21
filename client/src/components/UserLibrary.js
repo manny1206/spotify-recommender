@@ -39,7 +39,7 @@ export default function UserLibrary({ accessToken, playTrack }) {
       })
 
     return () => (loaded = false)
-  }, [accessToken])
+  }, [userLibrary])
 
   return (
     <div className="d-flex m-2 align-items-center" style={{cursor: "pointer"}}>

@@ -13,7 +13,7 @@ app.use(express.json())
 app.post("/login", (req, res) => {
   const code = req.body.code
   const spotifyAPI = new SpotifyWebAPI({
-    redirectUri: "https://emmanuel-jones-swe432-hw4.herokuapp.com",
+    redirectUri: "http://localhost:3000",
     clientId: "fc40f86251ce4a378422d00d57473fa1",
     clientSecret: "fc84316bd37244a58a4327916855496d"
   })
@@ -36,7 +36,7 @@ app.post("/refresh", (req, res) => {
   const refreshToken = req.body.refreshToken
 
   const spotifyAPI = new SpotifyWebAPI({
-    redirectUri: "https://emmanuel-jones-swe432-hw4.herokuapp.com",
+    redirectUri: "http://localhost:3000",
     clientId: "fc40f86251ce4a378422d00d57473fa1",
     clientSecret: "fc84316bd37244a58a4327916855496d",
     refreshToken

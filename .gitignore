@@ -1,6 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+/__pycache__
+/.vscode
 /node_modules
 /client/node_modules
 /.pnp
@@ -8,6 +10,7 @@
 
 # testing
 /coverage
+spotify_officialplaylists.csv
 
 # production
 /build

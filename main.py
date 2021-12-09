@@ -1,7 +1,7 @@
 import spotipy
 import pandas as pd
 # import yaml
-# from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyOAuth
 from spotipy.oauth2 import SpotifyClientCredentials
 
 import time
@@ -9,11 +9,17 @@ import pickle
 
 id = "075c7aa80d9342b5a0773bedf7700940"
 secret = "803fce8441af4f1ebef12b40c03bd0aa"
-url = "http://127.0.0.1:8080/"
+# url = "http://127.0.0.1:8080/"
+url = "http://localhost:3000"
+my_scope = "user-library-read"
+spot = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=id, client_secret=secret))
+# spot = spotipy.Spotify(client_credentials_manager=SpotifyOAuth(client_id=id, client_secret=secret, scope=my_scope, redirect_uri=url))
+# auth_manager = SpotifyClientCredentials
+# spot = spotipy.Spotify(auth_manager=auth_manager)
 
-def retrieve_track_ids(playlist_id, dataset):
-    spot = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=id, client_secret=secret))
+def retrieve_track_ids(playlist_id):
     results = spot.playlist_tracks(playlist_id)
+    tracks = {}
 
     for index in range(50):
         if(index >= len(results["items"])):
@@ -29,7 +35,7 @@ def retrieve_track_ids(playlist_id, dataset):
                     song_id = temp_track["id"]
                     song_name = temp_track["name"]
                     song_artist = temp_track["artists"][0]["name"]
-                    dataset[song_id] = (song_name, song_artist, spot.audio_features([song_id]))
+                    tracks[song_id] = (song_name, song_artist, spot.audio_features([song_id])[0])
 
                 else:
                     print("track id is none type {} {}".format(index, playlist_id))
@@ -40,7 +46,7 @@ def retrieve_track_ids(playlist_id, dataset):
         except:
             print("This shit is fucking broken")
 
-    return dataset
+    return tracks
 
 
 def parse_spreadsheet(file):
@@ -51,9 +57,19 @@ def parse_spreadsheet(file):
     # for temp in spreadsheet["Description"]:
     #     print(temp)
     for index in range(100):
-        dataset = retrieve_track_ids(spreadsheet["URL"][index][-22:], dataset)
+        playlist_id = spreadsheet["URL"][index][-22:]
+        dataset[playlist_id] = retrieve_track_ids(playlist_id)
 
     return dataset
+
+def determine_similarity(dataset, user_song_id):
+    similarity_score = []
+    temp = dataset.values()
+    for playlist in dataset.values():
+        for track in playlist.values():
+            print("hi")
+            track_feature = track[2]
+            # user_track_feature =
 
 def main():
     start = time.time()
@@ -69,6 +85,10 @@ def main():
     else:
         with open('spotify_dataset', 'rb') as fp:
             dataset = pickle.load(fp)
+
+    temp = determine_similarity(dataset, "hi")
+
+    # print(temp)
 
     ###############
     # with open("spotify/spotify_details.yml", 'r') as stream:
@@ -106,7 +126,7 @@ def main():
     # for track in album.tracks.items:
     #     print(track.track_number, track.name)
 
-###################
+    ###################
     # import spotipy
     #
     # urn = '3jOstUTkEu2JkjvRdBA5Gu'

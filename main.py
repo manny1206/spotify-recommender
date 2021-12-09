@@ -4,7 +4,6 @@ import pandas as pd
 # from spotipy.oauth2 import SpotifyOAuth
 from spotipy.oauth2 import SpotifyClientCredentials
 
-
 import time
 import pickle
 
@@ -13,18 +12,17 @@ secret = "803fce8441af4f1ebef12b40c03bd0aa"
 url = "http://127.0.0.1:8080/"
 
 def retrieve_track_ids(playlist_id, dataset):
+    spot = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=id, client_secret=secret))
+    results = spot.playlist_tracks(playlist_id)
 
-    try:
-        spot = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=id, client_secret=secret))
-
-        results = spot.playlist_tracks(playlist_id)
-        index = 0
-
-        for track in results["items"]:
-            temp_track = track["track"]
+    for index in range(50):
+        if(index >= len(results["items"])):
+            break
+        try:
+            temp_track = results["items"][index]["track"]
 
             if(temp_track is None):
-                print("1 {} {}".format(index, playlist_id))
+                print("track is none type {} {}".format(index, playlist_id))
 
             else:
                 if(temp_track["id"] is not None):
@@ -34,25 +32,26 @@ def retrieve_track_ids(playlist_id, dataset):
                     dataset[song_id] = (song_name, song_artist, spot.audio_features([song_id]))
 
                 else:
-                    print("2 {} {}".format(index, playlist_id))
+                    print("track id is none type {} {}".format(index, playlist_id))
 
-            index += 1
+        except spotipy.exceptions.SpotifyException:
+            print("Spotipy Exception")
 
-    except spotipy.exceptions.SpotifyException:
-        print("Spotipy Exception")
-
-    except:
-        print("This shit is fucking broken")
+        except:
+            print("This shit is fucking broken")
 
     return dataset
 
 
 def parse_spreadsheet(file):
     spreadsheet = pd.read_csv(file)
+    spreadsheet.sort_values(by="Followers")
     dataset = {}
 
-    for val in spreadsheet["URL"]:
-        dataset = retrieve_track_ids(val[-22:], dataset)
+    # for temp in spreadsheet["Description"]:
+    #     print(temp)
+    for index in range(100):
+        dataset = retrieve_track_ids(spreadsheet["URL"][index][-22:], dataset)
 
     return dataset
 

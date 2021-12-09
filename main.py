@@ -31,7 +31,7 @@ def retrieve_track_ids(playlist_id, dataset):
                     song_id = temp_track["id"]
                     song_name = temp_track["name"]
                     song_artist = temp_track["artists"][0]["name"]
-                    dataset[song_id] = (song_name, song_artist)
+                    dataset[song_id] = (song_name, song_artist, spot.audio_features([song_id]))
 
                 else:
                     print("2 {} {}".format(index, playlist_id))
@@ -71,10 +71,7 @@ def main():
         with open('spotify_dataset', 'rb') as fp:
             dataset = pickle.load(fp)
 
-    print(dataset["4fouWK6XVHhzl78KzQ1UjL"])
-    spot = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=id, client_secret=secret))
-    temp = spot.track("4fouWK6XVHhzl78KzQ1UjL")
-
+    ###############
     # with open("spotify/spotify_details.yml", 'r') as stream:
     #     spotify_details = yaml.safe_load(stream)
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { TextField, Container } from "@mui/material"
 import SpotifyWebApi from "spotify-web-api-node"
+import axios from "axios"
 
 import useAuth from "../useAuth"
 import SearchResult from "./SearchResult"
@@ -20,6 +21,8 @@ export default function Dashboard({ code }) {
 
   useEffect(() => {
     if (!accessToken) return
+    axios.get(`http://localhost:3002/recommend?token=${accessToken}`)
+      .then(res => console.log(res))
     spotifyAPI.setAccessToken(accessToken)
   }, [accessToken])
 

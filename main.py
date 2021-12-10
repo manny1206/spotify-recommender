@@ -3,9 +3,12 @@ import pandas as pd
 # import yaml
 from spotipy.oauth2 import SpotifyOAuth
 from spotipy.oauth2 import SpotifyClientCredentials
+import math
+from scipy.spatial import distance
 
 import time
 import pickle
+import json
 
 id = "075c7aa80d9342b5a0773bedf7700940"
 secret = "803fce8441af4f1ebef12b40c03bd0aa"
@@ -30,15 +33,15 @@ def retrieve_track_ids(playlist_id):
             if(temp_track is None):
                 print("track is none type {} {}".format(index, playlist_id))
 
-            else:
-                if(temp_track["id"] is not None):
-                    song_id = temp_track["id"]
-                    song_name = temp_track["name"]
-                    song_artist = temp_track["artists"][0]["name"]
-                    tracks[song_id] = (song_name, song_artist, spot.audio_features([song_id])[0])
+            elif(temp_track["id"] is None):
+                print("track is none type {} {}".format(index, playlist_id))
 
-                else:
-                    print("track id is none type {} {}".format(index, playlist_id))
+            else:
+                song_id = temp_track["id"]
+                song_features = spot.audio_features([song_id])[0]
+                if(song_features is not None):
+                    tracks[song_id] = song_features
+
 
         except spotipy.exceptions.SpotifyException:
             print("Spotipy Exception")
@@ -50,45 +53,104 @@ def retrieve_track_ids(playlist_id):
 
 
 def parse_spreadsheet(file):
+    print("parse_spreadsheet")
     spreadsheet = pd.read_csv(file)
     spreadsheet.sort_values(by="Followers")
     dataset = {}
 
-    # for temp in spreadsheet["Description"]:
-    #     print(temp)
     for index in range(100):
         playlist_id = spreadsheet["URL"][index][-22:]
         dataset[playlist_id] = retrieve_track_ids(playlist_id)
 
+        if((index + 1) % 10):
+            print("{}% complete".format(index + 1))
+
     return dataset
 
+def extract_track_features(features):
+    my_features = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness',
+                   'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms', 'time_signature']
+
+    result_features = []
+
+    if(features is None):
+        return
+
+    for f in my_features:
+        result_features.append(features[f])
+
+    return result_features
+
+
 def determine_similarity(dataset, user_song_id):
-    similarity_score = []
-    temp = dataset.values()
-    for playlist in dataset.values():
-        for track in playlist.values():
-            print("hi")
-            track_feature = track[2]
-            # user_track_feature =
+    print("determine_similarity")
+    user_track_feature = extract_track_features(spot.audio_features(user_song_id)[0])
+    similarity_score = {}
+
+    for playlist in dataset.keys():
+        playlist_similarity = 0
+
+        for track in dataset[playlist].values():
+            track_feature = extract_track_features(track)
+
+            track_similarity = distance.euclidean(user_track_feature, track_feature)
+            playlist_similarity += track_similarity
+
+        similarity_score[playlist] = playlist_similarity / len(dataset[playlist])
+
+
+    temp = sorted(similarity_score.items(), key=lambda x: x[1])
+    return temp
+
+def parse_user_top_songs(user_song_json):
+    song_list = user_song_json["items"]
+    user_songs = []
+
+    for song in song_list:
+        user_songs.append(song["id"])
+        print(song["name"])
+
+    return user_songs
 
 def main():
     start = time.time()
     print("Start")
 
+    with open('my_top_songs.txt') as json_file:
+        my_top_songs = json.load(json_file)
+
+    user_song_list = parse_user_top_songs(my_top_songs)
+    print(user_song_list)
+
     parse = False
 
+    song_list = ["6H3TW6uEe3RxW8CcnXJfq2", "6UelLqGlWMcVH1E5c4H7lY", "6D6HVKe7Qu3imn4zzJD0W9", "7w87IxuO7BDcJ3YUqCyMTT",
+                 "5qEn8c0MBzyRKgQq91Vevi", "0GO8y8jQk1PkHzS31d699N", "152lZdxL1OR0ZMW6KquMif", "22UDw8rSfLbUsaAGTXQ4Z8",
+                 "77Ft1RJngppZlq59B6uP0z"]
+
     if(parse):
+        print("Parsing data")
         dataset = parse_spreadsheet("spotify_officialplaylists.csv")
         with open('spotify_dataset', 'wb') as fp:
             pickle.dump(dataset, fp)
         fp.close()
     else:
+        print("Retrieving Data")
         with open('spotify_dataset', 'rb') as fp:
             dataset = pickle.load(fp)
 
-    temp = determine_similarity(dataset, "hi")
+    results_file = open("results.txt", "w")
 
-    # print(temp)
+    for my_song in song_list:
+        similar_playlist = determine_similarity(dataset, my_song)[0][0]
+        my_playlist = spot.playlist(similar_playlist)
+
+        # print("My song is {} by {}".format(spot.track(my_song)["name"], spot.track(my_song)["artists"][0]["name"]))
+        # print("My recommended playlist is {} - {}".format(my_playlist["name"],my_playlist["external_urls"]["spotify"]))
+        # print("My song is {} by {}. My recommended playlist is {} - {}".format(spot.track(my_song)["name"], spot.track(my_song)["artists"][0]["name"], my_playlist["name"],my_playlist["external_urls"]["spotify"]))
+        # results_file.write("My song is {} by {}. My recommended playlist is {} - {}\n".format(spot.track(my_song)["name"], spot.track(my_song)["artists"][0]["name"], my_playlist["name"],my_playlist["external_urls"]["spotify"]))
+        results_file.write("{} by {} ---> {} {}\n".format(spot.track(my_song)["name"], spot.track(my_song)["artists"][0]["name"], my_playlist["name"], my_playlist["external_urls"]["spotify"]))
+
 
     ###############
     # with open("spotify/spotify_details.yml", 'r') as stream:

@@ -137,23 +137,28 @@ def main():
 
     parse = True
 
+    # list of songs for testing
     song_list = ["6H3TW6uEe3RxW8CcnXJfq2", "6UelLqGlWMcVH1E5c4H7lY", "6D6HVKe7Qu3imn4zzJD0W9", "7w87IxuO7BDcJ3YUqCyMTT",
                  "5qEn8c0MBzyRKgQq91Vevi", "0GO8y8jQk1PkHzS31d699N", "152lZdxL1OR0ZMW6KquMif", "22UDw8rSfLbUsaAGTXQ4Z8",
                  "77Ft1RJngppZlq59B6uP0z", "5HCyWlXZPP0y6Gqq8TgA20", "27NovPIUIRrOZoCHxABJwK", "3USxtqRwSYz57Ewm6wWRMp"]
 
+    # parses the data from the csv, and stores it in a file 
     if(parse):
         print("Parsing data")
         dataset = parse_spreadsheet("spotify_officialplaylists.csv")
         with open('spotify_dataset', 'wb') as fp:
             pickle.dump(dataset, fp)
         fp.close()
+    # loads the data set from file
     else:
         print("Retrieving Data")
         with open('spotify_dataset', 'rb') as fp:
             dataset = pickle.load(fp)
 
+    # used to store the recommendations 
     results_file = open("results.txt", "w")
 
+    # loop for testing, store recommendations for songs in list above
     for my_song in song_list:
         similar_playlist = determine_similarity(dataset, my_song)[0][0]
         my_playlist = spot.playlist(similar_playlist)

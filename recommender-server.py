@@ -1,5 +1,5 @@
 import spotipy
-import main
+import recommender
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
@@ -14,9 +14,9 @@ def recommend():
   
   spot = spotipy.Spotify(auth=token)
   top_songs_json = spot.current_user_top_tracks()
-  top_songs_ids = main.parse_user_top_songs(top_songs_json)
-  dataset = main.load_dataset()
-  recommended = main.recommend(dataset, top_songs_ids)
+  top_songs_ids = recommender.parse_user_top_songs(top_songs_json)
+  dataset = recommender.load_dataset()
+  recommended = recommender.recommend(dataset, top_songs_ids)
   
   res = jsonify(recommended)
   res.headers.add('Access-Control-Allow-Origin', '*')

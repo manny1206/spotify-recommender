@@ -7,8 +7,8 @@ import time
 import pickle
 import json
 
-id = "075c7aa80d9342b5a0773bedf7700940"
-secret = "803fce8441af4f1ebef12b40c03bd0aa"
+id = "fc40f86251ce4a378422d00d57473fa1"
+secret = "fc84316bd37244a58a4327916855496d"
 # url = "http://127.0.0.1:8080/"
 url = "http://localhost:3000"
 my_scope = "user-library-read"
@@ -16,7 +16,7 @@ spot = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(clien
 
 
 # takes the id of a playlist and returns a dictionary of track ids and track features
-def retrieve_track_ids(playlist_id):
+def retrieve_track_info(playlist_id):
     results = spot.playlist_tracks(playlist_id)
     tracks = {}
 
@@ -63,7 +63,7 @@ def parse_spreadsheet(file):
         # gets the uri/id of a playlist
         playlist_id = spreadsheet["URL"][index][-22:]
         # gets song id in the playlist
-        dataset[playlist_id] = retrieve_track_ids(playlist_id)
+        dataset[playlist_id] = retrieve_track_info(playlist_id)
 
         if ((index + 1) % 10 == 0):
             print("{}% complete".format(index + 1))
@@ -71,28 +71,34 @@ def parse_spreadsheet(file):
     return dataset
 
 
-# takes in a dictionary tha represents track features, and stores the desired variables into a list
 def extract_track_features(track):
     track_features = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness',
-                      'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms', 'time_signature']
+                   'instrumentalness', 'liveness', 'valence', 'tempo', 'duration_ms', 'time_signature']
 
     return {ftr: track[ftr] for ftr in track_features}
+
+
+def extract_track_genres(track):
+    artist_id = track["artists"][0]["id"]
+    return spot.artist(artist_id)["genres"]
 
 
 # gets the top 10 most similar songs
 def recommend(dataset, user_top_songs):
     distances = {}
     user_avgs = user_top_songs_feature_avgs(user_top_songs)
+    user_genres = list(dict(get_users_top_genres(spot.tracks(user_top_songs))).keys())
 
     # loops though each playlist in the data set
     for playlist in dataset.keys():
         for track in dataset[playlist].values():
-            features = extract_track_features(track)
-            distances[track["id"]] = distance.euclidean(list(user_avgs.values()), list(features.values()))
-
+            features = extract_track_features(track[0])
+            if any(genre in user_genres for genre in track[1]):
+                distances[track[0]["id"]] = distance.euclidean(list(user_avgs.values()), list(features.values()))
+        
     distances = {id: distance for id, distance in sorted(distances.items(), key=lambda item: item[1])}
     recommended_ids = list(distances.keys())[:10]
-
+    
     return spot.tracks(recommended_ids)
 
 
@@ -134,7 +140,7 @@ def get_users_top_genres(song_dict):
     user_genres = {}
 
     # loops through each track
-    for track in song_dict["items"]:
+    for track in song_dict["tracks"]:
         artist_id = track["artists"][0]["id"]
         artist_genres = spot.artist(artist_id)["genres"]
         
@@ -168,10 +174,10 @@ def main():
         with open('spotify_dataset', 'rb') as fp:
             dataset = pickle.load(fp)
 
-    file = open("my_top_songs.txt")
-    user_dict = json.load(file)
-    user_genres = get_users_top_genres(user_dict)
-    print(user_genres)
+    # file = open("my_top_songs.txt")
+    # user_dict = json.load(file)
+    # user_genres = get_users_top_genres(user_dict)
+    # print(user_genres)
 
     print("Done")
     print(time.time() - start)

@@ -22,6 +22,7 @@ spotify_officialplaylists.csv
 .env.test.local
 .env.production.local
 .cache
+spotify_dataset
 
 npm-debug.log*
 yarn-debug.log*

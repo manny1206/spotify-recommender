@@ -1,4 +1,4 @@
-# SWE-432 HW-4 Starter Application
+# CS484 Final Project
 
 ## Submission Information
 
@@ -7,6 +7,9 @@
 *Please fill in this information before submission*
 
 * **Student Name: Emmanuel Jones** 
+* **Student G-Number: G01124882** 
+
+* **Student Name: Ron Phung** 
 * **Student G-Number: G01124882** 
 * **Heroku Deployment URL: https://emmanuel-jones-swe432-hw4.herokuapp.com/ **
 

@@ -6,7 +6,7 @@ import axios from "axios"
 import useAuth from "../useAuth"
 import SearchResult from "./SearchResult"
 import TrackPlayer from "./TrackPlayer"
-import UserLibrary from "./UserLibrary"
+import UserRecommendations from "./UserRecommendations"
 
 const spotifyAPI = new SpotifyWebApi({
   clientId: "fc40f86251ce4a378422d00d57473fa1"
@@ -18,12 +18,14 @@ export default function Dashboard({ code }) {
   const [search, setSearch] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [playingTrack, setPlayingTrack] = useState()
+  const [recommendations, setRecommendations] = useState([])
 
   useEffect(() => {
     if (!accessToken) return
-    axios.get(`http://localhost:3002/recommend?token=${accessToken}`)
-      .then(res => console.log(res))
     spotifyAPI.setAccessToken(accessToken)
+    axios.get(`http://localhost:3002/recommend?token=${accessToken}`)
+      .then(res => setRecommendations(res.data.tracks))
+      
   }, [accessToken])
 
   useEffect(() => {
@@ -33,7 +35,6 @@ export default function Dashboard({ code }) {
     let cancel = false
     spotifyAPI.searchTracks(search)
       .then(res => {
-        console.log(res)
         if (cancel) return
         setSearchResults(res.body.tracks.items.map(track => {
           const smallAlbumImage = track.album.images.reduce((smallest, image) => {
@@ -72,7 +73,7 @@ export default function Dashboard({ code }) {
             <SearchResult track={track} key={track.url} playTrack={playTrack} />
           ))}
           {searchResults.length === 0 && (
-            <UserLibrary accessToken={accessToken} playTrack={playTrack}/>
+            <UserRecommendations recommendations={recommendations} playTrack={playTrack}/>
           )}
 
         </div>

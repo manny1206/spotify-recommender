@@ -24,7 +24,7 @@ export default function UserRecommendationCard({track, playTrack}) {
         />
         <CardContent>
           <Typography gutterBottom variant="subtitle1" component="div">
-            {track.name.substring(0, 20)}
+            {track.name.length < 22 ? track.name : track.name.substring(0, 22) + "..."}
           </Typography>
           <Typography variant="subtitle2" color="text.secondary">
             {track.artists[0].name}

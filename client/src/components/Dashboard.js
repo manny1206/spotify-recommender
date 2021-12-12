@@ -24,7 +24,7 @@ export default function Dashboard({ code }) {
     if (!accessToken) return
     spotifyAPI.setAccessToken(accessToken)
     console.log(accessToken)
-    axios.get(`/recommend/${accessToken}`)
+    axios.get(`https://spotify-recommender-server.herokuapp.com/recommend/${accessToken}`)
       .then(res => setRecommendations(res.data.tracks))
       
   }, [accessToken])

@@ -3,6 +3,7 @@
 # dependencies
 /__pycache__
 /.vscode
+/client/.vscode
 /node_modules
 /client/node_modules
 /.pnp

@@ -23,7 +23,8 @@ export default function Dashboard({ code }) {
   useEffect(() => {
     if (!accessToken) return
     spotifyAPI.setAccessToken(accessToken)
-    axios.get(`/recommenderServer/recommend/${accessToken}`)
+    console.log(accessToken)
+    axios.get(`/recommend/${accessToken}`)
       .then(res => setRecommendations(res.data.tracks))
       
   }, [accessToken])

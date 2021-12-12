@@ -10,8 +10,8 @@
 * **Student G-Number: G01124882** 
 
 * **Student Name: Ron Phung** 
-* **Student G-Number: G01124882** 
-* **Heroku Deployment URL: https://emmanuel-jones-swe432-hw4.herokuapp.com/ **
+* **Student G-Number: G01194319** 
+* **Heroku Deployment URL: https://spotify-recommender-ejrp.herokuapp.com/ **
 
 ### Documentation of the Recommender Components
 

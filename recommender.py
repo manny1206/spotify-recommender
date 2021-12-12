@@ -78,11 +78,6 @@ def extract_track_features(track):
     return {ftr: track[ftr] for ftr in track_features}
 
 
-def extract_track_genres(track):
-    artist_id = track["artists"][0]["id"]
-    return spot.artist(artist_id)["genres"]
-
-
 # gets the top 10 most similar songs
 def recommend(dataset, user_top_songs):
     distances = {}

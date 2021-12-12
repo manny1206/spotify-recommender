@@ -1,9 +1,9 @@
 import React from 'react'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import CardActionArea from '@mui/material/CardActionArea';
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardMedia from '@mui/material/CardMedia'
+import Typography from '@mui/material/Typography'
+import CardActionArea from '@mui/material/CardActionArea'
 
 export default function UserRecommendationCard({track, playTrack}) {
   const handlePlayOnClick = () => {
@@ -23,11 +23,11 @@ export default function UserRecommendationCard({track, playTrack}) {
           alt="Album Cover"
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="subtitle1" component="div">
             {track.name.substring(0, 20)}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {track.artist}
+          <Typography variant="subtitle2" color="text.secondary">
+            {track.artists[0].name}
           </Typography>
         </CardContent>
       </CardActionArea>

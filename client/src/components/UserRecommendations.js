@@ -16,7 +16,7 @@ export default function UserRecommendations({ recommendations, playTrack }) {
   }, [recommendations])
 
   return (
-    <Container maxWidth="md" style={{minHeight:"100vh"}}>
+    <Container maxWidth="md" style={{minHeight:"100%"}}>
       <Grid container spacing={1} rowSpacing={0.5} columns={4}>
         <Grid item xs={12} style={{textAlign: "center", fontSize: "30px"}}>
           Song Recommendations

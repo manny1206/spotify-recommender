@@ -59,7 +59,7 @@ def parse_spreadsheet(file):
     spreadsheet.sort_values(by="Followers")
     dataset = {}
 
-    for index in range(100):
+    for index in range(500):
         # gets the uri/id of a playlist
         playlist_id = spreadsheet["URL"][index][-22:]
         # gets song id in the playlist

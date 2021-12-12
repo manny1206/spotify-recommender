@@ -12,7 +12,6 @@ export default function UserRecommendations({ recommendations, playTrack }) {
   useEffect(() => {
     if (!recommendations) return
     setUserRecommendations(recommendations)
-    console.log(recommendations)
   }, [recommendations])
 
   return (
@@ -23,7 +22,7 @@ export default function UserRecommendations({ recommendations, playTrack }) {
         </Grid>
       {userRecommendations.map(track => (
         <Grid item>
-          <UserRecommendationCard track={track} playTrack={playTrack}/>
+          <UserRecommendationCard track={track} key={track.external_urls.spotify} playTrack={playTrack}/>
         </Grid>
       ))}
       </Grid>

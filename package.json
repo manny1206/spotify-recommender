@@ -24,6 +24,7 @@
     "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
+    "http-proxy-middleware": "^2.0.1",
     "nodemon": "^2.0.15"
   },
   "engines": {

@@ -15,7 +15,6 @@ spotify_officialplaylists.csv
 
 # production
 /build
-/recommender
 
 # misc
 .DS_Store

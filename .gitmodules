@@ -1,0 +1,4 @@
+[submodule "spotify-recommender-server"]
+	path = spotify-recommender-server
+	url = https://git.heroku.com/spotify-recommender-server.git
+	branch = master
